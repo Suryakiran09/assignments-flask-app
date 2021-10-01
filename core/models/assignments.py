@@ -13,6 +13,10 @@ class GradeEnum(str, enum.Enum):
     C = 'C'
     D = 'D'
 
+    @classmethod
+    def is_valid_grade(cls, str): 
+        return str in cls._value2member_map_
+
 
 class AssignmentStateEnum(str, enum.Enum):
     DRAFT = 'DRAFT'
@@ -89,6 +93,7 @@ class Assignment(db.Model):
         assertions.assert_valid(assignment.state == AssignmentStateEnum.SUBMITTED,
                                 'only a submitted assignment can be graded')
         assertions.assert_valid(assignment.teacher_id == principal.teacher_id, 'This assignment is submitted to some other teacher')
+        assertions.assert_valid(GradeEnum.is_valid_grade(grade), 'Invalid Grade')
 
         assignment.grade = grade
         assignment.state = AssignmentStateEnum.GRADED
