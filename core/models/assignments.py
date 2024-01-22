@@ -6,7 +6,6 @@ from core.models.teachers import Teacher
 from core.models.students import Student
 from sqlalchemy.types import Enum as BaseEnum
 
-
 class GradeEnum(str, enum.Enum):
     A = 'A'
     B = 'B'
@@ -14,15 +13,13 @@ class GradeEnum(str, enum.Enum):
     D = 'D'
 
     @classmethod
-    def is_valid_grade(cls, str): 
-        return str in cls._value2member_map_
-
+    def is_valid_grade(cls, grade): 
+        return grade in cls._value2member_map_
 
 class AssignmentStateEnum(str, enum.Enum):
     DRAFT = 'DRAFT'
     SUBMITTED = 'SUBMITTED'
     GRADED = 'GRADED'
-
 
 class Assignment(db.Model):
     __tablename__ = 'assignments'
@@ -96,8 +93,4 @@ class Assignment(db.Model):
         assertions.assert_valid(GradeEnum.is_valid_grade(grade), 'Invalid Grade')
 
         assignment.grade = grade
-        assignment.state = AssignmentStateEnum.GRADED
-
-        db.session.flush()
-
-        return assignment
+        assignment.state = AssignmentStateEnum
